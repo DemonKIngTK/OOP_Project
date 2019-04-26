@@ -1,8 +1,6 @@
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -14,17 +12,29 @@ public class Maingame {
 	public static void main(String[] args) {
 		MyFrame Login=new MyFrame("Login");
 		MyFrame Lobby=new MyFrame();
-		try {
-			System.out.println(InetAddress.getLocalHost().getHostAddress());
-		} catch (UnknownHostException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		guiFrame giu = new guiFrame();
+		BomberData data = new BomberData();
+		giu.back.startServer.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				BroadcastServer server =new BroadcastServer();
+			}
+		});
+		giu.back.jion.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Login.setVisible(true);
+				giu.setVisible(false);
+			}
+		});
 		Login.btnOk.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				
+				data.setName(Login.textName.getText());
+				ClientFindServer client = new ClientFindServer();
 				Login.setVisible(false);
 				Lobby.setVisible(true);
 			}
@@ -60,19 +70,19 @@ class MyFrame extends JFrame{
 	JLabel labelP1 = new JLabel("");
 	JLabel labelP2 = new JLabel("");
 	JLabel labelP3 = new JLabel("");
-	JTextField textField_1 = new JTextField();
-	JTextField textField_2 = new JTextField();
+	JTextField textName = new JTextField();
 	JLabel lblHostIp = new JLabel("Host IP");
 	JButton btnOk = new JButton("OK");
 	JButton buttonExit = new JButton("Exit");
-	JButton buttonStart = new JButton("Start");
 	JLabel lblName = new JLabel("Name");
+	JButton btnStart = new JButton("Start");
 	public MyFrame() {
-		setBounds(100, 100, 800, 500);
+		setSize( 800, 500);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBackground(Color.CYAN);
 		setTitle("Lobby");
 		getContentPane().setLayout(null);
+		setLocationRelativeTo(null);
 				
 		textField.setBounds(10, 372, 500, 20);
 		getContentPane().add(textField);
@@ -106,35 +116,27 @@ class MyFrame extends JFrame{
 		labelP3.setBounds(520, 168, 254, 23);
 		getContentPane().add(labelP3);
 		
+		btnStart.setBounds(520, 300, 254, 35);
+		getContentPane().add(btnStart);
 	}
 	MyFrame(String title){
-		setBounds(100, 100, 500, 300);
+		setSize( 500, 300);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBackground(Color.CYAN);
 		getContentPane().setLayout(null);
+		setLocationRelativeTo(null);
 				
 		lblName.setBounds(230, 39, 46, 14);
 		getContentPane().add(lblName);
 				
-		textField_1.setBounds(89, 61, 305, 20);
-		getContentPane().add(textField_1);
-		textField_1.setColumns(10);
+		textName.setBounds(89, 61, 305, 20);
+		getContentPane().add(textName);
+		textName.setColumns(10);
 				
-		textField_2.setBounds(89, 130, 305, 20);
-		getContentPane().add(textField_2);
-		textField_2.setColumns(10);
-		
-		lblHostIp.setBounds(230, 105, 46, 14);
-		getContentPane().add(lblHostIp);
-		
 		btnOk.setBounds(89, 200, 89, 23);
 		getContentPane().add(btnOk);
 
 		buttonExit.setBounds(305, 200, 89, 23);
 		getContentPane().add(buttonExit);
-		
-		buttonStart.setBounds(305, 200, 89, 23);
-		getContentPane().add(buttonStart);
-		setVisible(true);
 	}
 }
