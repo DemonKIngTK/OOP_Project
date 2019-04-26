@@ -6,6 +6,8 @@ public class MessgeChat implements Serializable{
 	private String name;
 	private String player;
 	private int poet;
+	private boolean start;
+	private boolean startGame;
 	public String getIP() {
 		return IP;
 	}
@@ -29,5 +31,17 @@ public class MessgeChat implements Serializable{
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	public boolean isStart() {
+		return start;
+	}
+	public void setStart(boolean start) {
+		this.start = start;
+	}
+	public boolean isStartGame() {
+		return startGame;
+	}
+	public void setStartGame(boolean startGame) {
+		this.startGame = startGame;
 	}
 }

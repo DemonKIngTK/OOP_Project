@@ -17,8 +17,10 @@ import java.util.Enumeration;
 
 
 public class ClientFindServer {
-	public ClientFindServer() {
-		inputClient input = new inputClient();
+	MyFrame frame;
+	public ClientFindServer(MyFrame frame) {
+		this.frame =frame;
+		inputClient input = new inputClient(this.frame);
 		MyClient client = new MyClient();
 		input.start();
 	}
@@ -110,7 +112,9 @@ class MyClient {
 class inputClient extends Thread{
 	ServerSocket clientSocket;
 	MessgeChat chatIn;
-	public inputClient() {
+	MyFrame frame;
+	public inputClient(MyFrame frame) {
+		this.frame = frame;
 	}
 	@Override
 	public void run() {
@@ -128,6 +132,13 @@ class inputClient extends Thread{
 				chatIn = (MessgeChat) si.readObject();
 				System.out.println(chatIn.getIP()+"\t"+chatIn.getPlayer()+"\n");
 				chat.setPlayer(chatIn.getPlayer());
+				if(chatIn.isStart()) {
+					frame.address=chatIn.getIP();
+					frame.btnStart.setVisible(true);
+				}
+				else if(chatIn.isStartGame()){
+					bmb bmb = new bmb();
+				}
 			}
 		} catch (IOException e) {
 			System.err.println(e.getMessage());

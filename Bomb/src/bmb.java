@@ -20,15 +20,15 @@ class bmb extends JFrame implements KeyListener{
 	static int yPixel1 = 90;
 	static int xPixel2 = 870; // Player2
 	static int yPixel2 = 90;
-	static int xPixel3 = 870; // Player3
-	static int yPixel3 = 90;
+	static int xPixel3 = 70; // Player3
+	static int yPixel3 = 540;
 	static int xPixel4 = 870; // Player4
-	static int yPixel4 = 90;
+	static int yPixel4 = 490;
 	//public JTextField Score;
 	//private JPanel panel;
 	int ok;
-	int Player1=1,Player2=1; //Player life
-	int x=1,y=1,x1=17,y1=1; //coord Player1 & PLayer2
+	int Player1=1,Player2=1,Player3=1,Player4=1; //Player life
+	int x1=1,y1=1,x2=17,y2=1,x3=1,y3=10,x4=17,y4=1; //coord Player1 & PLayer2
 	long time1,time2,t1,t2;   //time form bomb & explosion
 	int v[][]= {{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,},  //map
 				{1,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,0,0,1,},
@@ -38,17 +38,21 @@ class bmb extends JFrame implements KeyListener{
 				{1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,},
 				{1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,},
 				{1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,},
-				{1,0,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,0,1,},
-				{1,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,0,0,1,},
+				{1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,},
+				{1,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0,1,},
+				{1,0,4,2,2,2,2,2,2,2,2,2,2,2,2,2,0,0,1,},
 				{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,},};
 	int i,j,ok1=0,ok2=0,cx,cy,cx1,cy1,c1,c2,C1,C2,bomb1,bomb2,Bomb1Level=1,Bomb2Level=1;
-	Image Image,Image1,Image2,Image3,Image4,Image5,ImageC,ImageL,ImageR,ImageU,ImageD,ImageP,ImageV,ImageO, offScreenImage,ImageBG;
+	Image Imagep1,Imagep2,Imagep3,Imagep4,Image2,Image3,Image4,Image5,ImageC,ImageL,ImageR,
+	ImageSH,ImageU,ImageD,ImageP,ImageV,ImageO, offScreenImage,ImageBG,ImageBo;
 	Graphics offScreenGraphics; 
 	FileInputStream DieS;
 	public bmb() {
 		try {
-			Image = Toolkit.getDefaultToolkit().getImage("./ImagesRes/P1.png");
-			Image1 = Toolkit.getDefaultToolkit().getImage("./ImagesRes/P2.png");
+			Imagep1 = Toolkit.getDefaultToolkit().getImage("./ImagesRes/P1F.png");
+			Imagep2 = Toolkit.getDefaultToolkit().getImage("./ImagesRes/P2F.png");
+			Imagep3 = Toolkit.getDefaultToolkit().getImage("./ImagesRes/P3F.png");
+			Imagep4 = Toolkit.getDefaultToolkit().getImage("./ImagesRes/P4F.png");
 			ImageBG = Toolkit.getDefaultToolkit().getImage("./ImagesRes/BG.jpg");
 			Image2 = Toolkit.getDefaultToolkit().getImage("./ImagesRes/BlockBreakable.jpg"); 
 			Image3 = Toolkit.getDefaultToolkit().getImage("./ImagesRes/Block.jpg");
@@ -59,18 +63,20 @@ class bmb extends JFrame implements KeyListener{
 			ImageR = Toolkit.getDefaultToolkit().getImage("./ImagesRes/right.png");
 			ImageU = Toolkit.getDefaultToolkit().getImage("./ImagesRes/up.png");
 			ImageD = Toolkit.getDefaultToolkit().getImage("./ImagesRes/down.png");
-			ImageP = Toolkit.getDefaultToolkit().getImage("./ImagesRes/powerup.png");
+			ImageP = Toolkit.getDefaultToolkit().getImage("./ImagesRes/Poweritem.png");
 			ImageV = Toolkit.getDefaultToolkit().getImage("./ImagesRes/vertical.png");
 			ImageO = Toolkit.getDefaultToolkit().getImage("./ImagesRes/orizontal.png");
+			ImageSH =  Toolkit.getDefaultToolkit().getImage("./ImagesRes/shielditem.png");
+			ImageBo = Toolkit.getDefaultToolkit().getImage("./ImagesRes/Bomitem.png");
 		} 
 		catch(Exception e) {
 			e.printStackTrace();
 		}
-		setSize(1000,600);
+		setBackground(new Color(17, 120, 49));
+		setSize(1000,650);
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		addKeyListener(this);
-		addMouseListener(new Mymouse(this));
 	}
 	public void update(Graphics g) {
 		paint(g);
@@ -85,17 +91,20 @@ class bmb extends JFrame implements KeyListener{
 			offScreenGraphics = offScreenImage.getGraphics();
 		}
 		offScreenGraphics.clearRect(0, 0, width, height);
-		for(i=0;i<11;i++)
+		for(i=0;i<12;i++)
 			for(j=0;j<19;j++)
 			{
-				if(v[i][j]==2)
-					offScreenGraphics.drawImage(Image2, 20+j*50, 38+i*50, this);
-				if(v[i][j]==1)
-					offScreenGraphics.drawImage(Image3, 20+j*50, 40+i*50, this);
-				if(v[i][j]==3)
-					offScreenGraphics.drawImage(ImageP, 20+j*50, 40+i*50, this);
-				if(v[i][j]==0)
-					offScreenGraphics.drawImage(ImageBG, 20+j*50, 38+i*50, this);
+				if(v[i][j]==2) {
+					offScreenGraphics.drawImage(Image2, 20+j*50, 38+i*50, this);}
+				if(v[i][j]==1) {
+					offScreenGraphics.drawImage(Image3, 20+j*50, 40+i*50, this);}
+				if(v[i][j]==3) {
+					offScreenGraphics.drawImage(ImageP, 20+j*50, 38+i*50, this);}
+				if(v[i][j]==0) {
+					offScreenGraphics.drawImage(ImageBG, 20+j*50, 38+i*50, this);}
+				if(v[i][j]==4) {
+					offScreenGraphics.drawImage(ImageSH, 20+j*50, 38+i*50, this);
+				}
 			}
 		if(ok1!=0) //if bomb1 is placed
 			{
@@ -197,10 +206,14 @@ class bmb extends JFrame implements KeyListener{
 						repaint();
 				}
 		}
-		if(Player1>0)
-		offScreenGraphics.drawImage(Image, xPixel1, yPixel1, this);
-		if(Player2>0)
-		offScreenGraphics.drawImage(Image1, xPixel2, yPixel2, this);
+		if(Player1>0) {
+		offScreenGraphics.drawImage(Imagep1, xPixel1, yPixel1,50,50, this);}
+		if(Player2>0) {
+		offScreenGraphics.drawImage(Imagep2, xPixel2, yPixel2,50,50, this);}
+		if(Player3>0) {
+			offScreenGraphics.drawImage(Imagep3, xPixel3, yPixel3,50,50, this);}
+		if(Player4>0) {
+			offScreenGraphics.drawImage(Imagep4, xPixel4, yPixel4,50,50, this);}
 		g.drawImage(offScreenImage, 0, 0, this);
 		/*Score = new JTextField();
     	Score.setSize(50, 50);
@@ -267,22 +280,19 @@ class bmb extends JFrame implements KeyListener{
 	}
 	public void die(int yy,int xx)
 	{
-		if(yy==y&&xx==x) {
-			Player1=0;}
+		if(yy==y3&&xx==x3) {
+			Player3=0;}
 		if(yy==y1&&xx==x1) {
 			Player2=0;}
 	}
 	public void power(int a,int b)
 	{
 		int rand = ThreadLocalRandom.current().nextInt(1, 10 + 1);
-		if(rand==3)
-			v[a][b]=3;
-	}
-	public void sh(int a,int b)
-	{
-		int rand = ThreadLocalRandom.current().nextInt(1, 10 + 1);
-		if(rand==3)
-			v[a][b]=3;
+		if(rand==3) {
+			v[a][b]=3;}
+		else if(rand==4) {
+			v[a][b]=4;
+		}
 	}
 	public void atrib(int a,int b,int player)
 	{
@@ -301,6 +311,15 @@ class bmb extends JFrame implements KeyListener{
 					}
 					v[a][b]=0;
 				}
+			
+		}else if(v[a][b]==4) {
+			if(player==1)
+			{
+				v[a][b]=0;
+			}
+		else {
+				v[a][b]=0;
+			}
 		}
 	}
 	public int valid (int i,int j) //if moving position is valid
@@ -310,48 +329,48 @@ class bmb extends JFrame implements KeyListener{
 		return 0;
 	}
 	public void keyPressed(KeyEvent ke) {
-		if(Player1>0)
+		if(Player3>0)
 		{switch (ke.getKeyCode()) {
 		case KeyEvent.VK_RIGHT: {
 			{
-				if(valid(y,x+1)==1)
+				if(valid(y3,x3+1)==1)
 				{
-					xPixel1+=50;
-					x++;
-					atrib(y,x,1);
+					xPixel3+=50;
+					x3++;
+					atrib(y3,x3,1);
 				}
 			}
 		}
 		break;
 		case KeyEvent.VK_LEFT: {
 			{
-				if(valid(y,x-1)==1)
+				if(valid(y3,x3-1)==1)
 				{
-					xPixel1-=50;
-					x--;
-					atrib(y,x,1);
+					xPixel3-=50;
+					x3--;
+					atrib(y3,x3,1);
 				}
 			}
 		}
 		break;
 		case KeyEvent.VK_DOWN: {
 			{
-				if(valid(y+1,x)==1)
+				if(valid(y3+1,x3)==1)
 				{
-					yPixel1+=50;
-					y++;
-					atrib(y,x,1);
+					yPixel3+=50;
+					y3++;
+					atrib(y3,x3,1);
 				}
 			};
 		}
 		break;
 		case KeyEvent.VK_UP: {
 			{
-				if(valid(y-1,x)==1)
+				if(valid(y3-1,x3)==1)
 				{
-					yPixel1-=50;
-					y--;
-					atrib(y,x,1);
+					yPixel3-=50;
+					y3--;
+					atrib(y3,x3,1);
 				}
 			}
 		}
@@ -360,10 +379,10 @@ class bmb extends JFrame implements KeyListener{
 			{
 				if(ok1==0&&bomb1==0)
 				{ok1=1;
-				cx=xPixel1+20;
-				c1=x;
-				cy=yPixel1+10;
-				c2=y;
+				cx=xPixel3+20;
+				c1=x3;
+				cy=yPixel3+10;
+				c2=y3;
 				v[c2][c1]=5;
 				time1=System.nanoTime();}
 			}
@@ -371,13 +390,13 @@ class bmb extends JFrame implements KeyListener{
 		break;
 		}}
 		repaint();
-		if(Player2>0)
+		if(Player4>0)
 		{switch (ke.getKeyChar()) {
 		case 'd': {
 			{
 				if(valid(y1,x1+1)==1)
 				{
-					xPixel2+=50;
+					xPixel4+=50;
 					x1++;
 					atrib(y1,x1,2);
 				}
@@ -388,7 +407,7 @@ class bmb extends JFrame implements KeyListener{
 			{
 				if(valid(y1,x1-1)==1)
 				{
-					xPixel2-=50;
+					xPixel4-=50;
 					x1--;
 					atrib(y1,x1,2);
 				}
@@ -399,7 +418,7 @@ class bmb extends JFrame implements KeyListener{
 			{
 				if(valid(y1+1,x1)==1)
 				{
-					yPixel2+=50;
+					yPixel4+=50;
 					y1++;
 					atrib(y1,x1,2);
 				}
@@ -410,7 +429,7 @@ class bmb extends JFrame implements KeyListener{
 			{
 				if(valid(y1-1,x1)==1)
 				{
-					yPixel2-=50;
+					yPixel4-=50;
 					y1--;
 					atrib(y1,x1,2);
 				}
@@ -435,11 +454,6 @@ class bmb extends JFrame implements KeyListener{
 		}
 		}
 		repaint();
-	}
-	public static void main(String args[]){
-
-		bmb me = new bmb();
-
 	}
 	//When a key is typed (once)
 	public void keyTyped(KeyEvent ke) {}    

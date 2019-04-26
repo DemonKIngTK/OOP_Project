@@ -12,6 +12,10 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class guiFrame extends JFrame{
+	BroadcastServer server;
+	serverInput input;
+	ClientFindServer client;
+	inputClient client2;
 	Back back=new Back();
 	public guiFrame() {
 		setSize(1000,600);
