@@ -83,21 +83,21 @@ class MyClient {
 		  //Logger.getLogger(LoginWindow.class.getName()).log(Level.SEVERE, null, ex);
 		}
 		//System.out.println(receivePacket.getAddress().getHostAddress());
-		MessgeChat chat = new MessgeChat();
+		BomberData bomdata = new BomberData();
 		try {
-			chat.setIP(InetAddress.getLocalHost().getHostAddress());
+			bomdata.setIp(InetAddress.getLocalHost().getHostAddress());
 		} catch (UnknownHostException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		chat.setPoet(9990);
+		bomdata.setPort(9999);
 		byte[] data = new byte[2048];
 		
 		ByteArrayOutputStream bo = new ByteArrayOutputStream();
 		ObjectOutputStream so;
 		try {
 			so = new ObjectOutputStream(bo);
-			so.writeObject(chat);
+			so.writeObject(bomdata);
 			so.flush();
 			data = bo.toByteArray();
 			Socket socket = new Socket(receivePacket.getAddress().getHostAddress(), 8888);
@@ -132,6 +132,11 @@ class inputClient extends Thread{
 				chatIn = (MessgeChat) si.readObject();
 				System.out.println(chatIn.getIP()+"\t"+chatIn.getPlayer()+"\n");
 				chat.setPlayer(chatIn.getPlayer());
+				if(chat.getPlayer().equals("Player1")) {
+					
+				}else if(chat.getPlayer().equals("Player2")) {
+					
+				}
 				if(chatIn.isStart()) {
 					frame.address=chatIn.getIP();
 					frame.btnStart.setVisible(true);

@@ -53,7 +53,7 @@ public class BroadcastServer extends Thread {
 class serverInput extends Thread{
 	BroadcastServer server;
 	ServerSocket serverSocket;
-	MessgeChat chatIn;
+	BomberData bomdata;
 	boolean fig = false;
 	int i=0;
 	String IP[] = new String[4];
@@ -73,26 +73,26 @@ class serverInput extends Thread{
 				input.read(data);
 				ByteArrayInputStream bi = new ByteArrayInputStream(data);
 				ObjectInputStream si = new ObjectInputStream(bi);
-				chatIn = (MessgeChat) si.readObject();
-				System.out.println(chatIn.getIP()+"\t\""+chatIn.getPoet());
+				bomdata = (BomberData) si.readObject();
+				System.out.println(bomdata.getIp()+"\t\""+bomdata.getPort());
 		          if(i==0) {
-		        	  IP[i]=chatIn.getIP();
-		        	  port[i]=chatIn.getPoet();
+		        	  IP[i]=bomdata.getIp();
+		        	  port[i]=bomdata.getPort();
 		        	  i=1;
 		          }
 		          else if(i==1) {
-		        	  IP[i]=chatIn.getIP();
-		        	  port[i]=chatIn.getPoet();
+		        	  IP[i]=bomdata.getIp();
+		        	  port[i]=bomdata.getPort();
 		        	  i=2; 
 		          }
 		          else if(i==2) {
-		        	  IP[i]=chatIn.getIP();
-		        	  port[i]=chatIn.getPoet();
+		        	  IP[i]=bomdata.getIp();
+		        	  port[i]=bomdata.getPort();
 		        	  i=3; 
 		          }
 		          else if(i==3) {
-		        	  IP[i]=chatIn.getIP();
-		        	  port[i]=chatIn.getPoet();
+		        	  IP[i]=bomdata.getIp();
+		        	  port[i]=bomdata.getPort();
 		        	  i=4;
 		        	  for (int i = 0; i < IP.length; i++) {
 							System.out.println("IP"+i+" = "+IP[i]+"   Port = "+port[i]);

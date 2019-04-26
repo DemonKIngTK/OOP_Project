@@ -6,8 +6,8 @@ public class MessgeChat implements Serializable{
 	private String name;
 	private String player;
 	private int poet;
-	private boolean start;
-	private boolean startGame;
+	private boolean start=false;
+	private boolean startGame=false;
 	public String getIP() {
 		return IP;
 	}

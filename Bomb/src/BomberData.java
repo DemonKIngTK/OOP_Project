@@ -5,6 +5,7 @@ public class BomberData implements Serializable{
 	//To join Server
 	private static String Name;
 	private static String Ip;
+	private static int port;
 	
 	//Chat
 	private static String str;
@@ -88,6 +89,12 @@ public class BomberData implements Serializable{
 	}
 	public static void setPi(int pi) {
 		Pi = pi;
+	}
+	public static int getPort() {
+		return port;
+	}
+	public static void setPort(int port) {
+		BomberData.port = port;
 	}
 	
 }

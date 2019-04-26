@@ -1,20 +1,10 @@
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.util.concurrent.TimeUnit;
-import javax.imageio.ImageIO;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
 import java.util.concurrent.ThreadLocalRandom;
 import java.awt.*;
+
+
 class bmb extends JFrame implements KeyListener{    
 	static int xPixel1 = 70;   // Player1
 	static int yPixel1 = 90;
@@ -26,6 +16,7 @@ class bmb extends JFrame implements KeyListener{
 	static int yPixel4 = 490;
 	//public JTextField Score;
 	//private JPanel panel;
+	MyAudio ad=new MyAudio();
 	int ok;
 	int Player1=1,Player2=1,Player3=1,Player4=1; //Player life
 	int x1=1,y1=1,x2=17,y2=1,x3=1,y3=10,x4=17,y4=1; //coord Player1 & PLayer2
@@ -40,15 +31,19 @@ class bmb extends JFrame implements KeyListener{
 				{1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,},
 				{1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,},
 				{1,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0,1,},
-				{1,0,4,2,2,2,2,2,2,2,2,2,2,2,2,2,0,0,1,},
+				{1,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,0,0,1,},
 				{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,},};
+	
 	int i,j,ok1=0,ok2=0,cx,cy,cx1,cy1,c1,c2,C1,C2,bomb1,bomb2,Bomb1Level=1,Bomb2Level=1;
 	Image Imagep1,Imagep2,Imagep3,Imagep4,Image2,Image3,Image4,Image5,ImageC,ImageL,ImageR,
-	ImageSH,ImageU,ImageD,ImageP,ImageV,ImageO, offScreenImage,ImageBG,ImageBo;
+	ImageSH,ImageU,ImageD,ImageP,ImageV,ImageO, offScreenImage,ImageBG;
+	String die;
 	Graphics offScreenGraphics; 
-	FileInputStream DieS;
+
 	public bmb() {
+		
 		try {
+			
 			Imagep1 = Toolkit.getDefaultToolkit().getImage("./ImagesRes/P1F.png");
 			Imagep2 = Toolkit.getDefaultToolkit().getImage("./ImagesRes/P2F.png");
 			Imagep3 = Toolkit.getDefaultToolkit().getImage("./ImagesRes/P3F.png");
@@ -67,7 +62,6 @@ class bmb extends JFrame implements KeyListener{
 			ImageV = Toolkit.getDefaultToolkit().getImage("./ImagesRes/vertical.png");
 			ImageO = Toolkit.getDefaultToolkit().getImage("./ImagesRes/orizontal.png");
 			ImageSH =  Toolkit.getDefaultToolkit().getImage("./ImagesRes/shielditem.png");
-			ImageBo = Toolkit.getDefaultToolkit().getImage("./ImagesRes/Bomitem.png");
 		} 
 		catch(Exception e) {
 			e.printStackTrace();
@@ -77,6 +71,7 @@ class bmb extends JFrame implements KeyListener{
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		addKeyListener(this);
+		ad.playSound();
 	}
 	public void update(Graphics g) {
 		paint(g);
@@ -215,10 +210,7 @@ class bmb extends JFrame implements KeyListener{
 		if(Player4>0) {
 			offScreenGraphics.drawImage(Imagep4, xPixel4, yPixel4,50,50, this);}
 		g.drawImage(offScreenImage, 0, 0, this);
-		/*Score = new JTextField();
-    	Score.setSize(50, 50);
-    	Score.setLocation(0,600);
-    	panel.add(Score);*/
+		
 	}
 	public void boom(int yy,int xx,int player) //clears barrels
 	{
@@ -282,8 +274,23 @@ class bmb extends JFrame implements KeyListener{
 	{
 		if(yy==y3&&xx==x3) {
 			Player3=0;}
-		if(yy==y1&&xx==x1) {
+		if(yy==y2&&xx==x2) {
 			Player2=0;}
+		if(yy==y1&&xx==x1) {
+			Player1=0;}
+		if(yy==y4&&xx==x4) {
+			Player4=0;}
+	}
+	public void end(int p1,int p2,int p3,int p4) {
+		if(p1==1&&p2==0&&p3==0&&p4==0) {
+			
+		}else if(p1==0&&p2==1&&p3==0&&p4==0) {
+			
+		}else if(p1==0&&p2==0&&p3==1&&p4==0) {
+			
+		}else if(p1==0&&p2==0&&p3==0&&p4==1) {
+			
+		}
 	}
 	public void power(int a,int b)
 	{
@@ -394,44 +401,44 @@ class bmb extends JFrame implements KeyListener{
 		{switch (ke.getKeyChar()) {
 		case 'd': {
 			{
-				if(valid(y1,x1+1)==1)
+				if(valid(y4,x4+1)==1)
 				{
 					xPixel4+=50;
-					x1++;
-					atrib(y1,x1,2);
+					x4++;
+					atrib(y4,x4,2);
 				}
 			}
 		}
 		break;
 		case 'a': {
 			{
-				if(valid(y1,x1-1)==1)
+				if(valid(y4,x4-1)==1)
 				{
 					xPixel4-=50;
-					x1--;
-					atrib(y1,x1,2);
+					x4--;
+					atrib(y4,x4,2);
 				}
 			}
 		}
 		break;
 		case 's': {
 			{
-				if(valid(y1+1,x1)==1)
+				if(valid(y4+1,x4)==1)
 				{
 					yPixel4+=50;
-					y1++;
-					atrib(y1,x1,2);
+					y4++;
+					atrib(y4,x4,2);
 				}
 			};
 		}
 		break;
 		case 'w': {
 			{
-				if(valid(y1-1,x1)==1)
+				if(valid(y4-1,x4)==1)
 				{
 					yPixel4-=50;
-					y1--;
-					atrib(y1,x1,2);
+					y4--;
+					atrib(y4,x4,2);
 				}
 			}
 		}
@@ -441,9 +448,9 @@ class bmb extends JFrame implements KeyListener{
 			if(ok2==0&&bomb2==0)
 			{
 			ok2=1;
-			cx1=xPixel2+20;
+			cx1=xPixel4+20;
 			C1=x1;
-			cy1=yPixel2+10;
+			cy1=yPixel4+10;
 			C2=y1;
 			time2=System.nanoTime();
 			v[C2][C1]=5;
@@ -455,6 +462,9 @@ class bmb extends JFrame implements KeyListener{
 		}
 		repaint();
 	}
+	public static void main(String[] args) {
+		bmb game=new bmb();
+	}
 	//When a key is typed (once)
 	public void keyTyped(KeyEvent ke) {}    
 	//When a key is released (typed or pressed)
@@ -463,5 +473,4 @@ class bmb extends JFrame implements KeyListener{
 		try { Thread.sleep(50); }   
 		catch (InterruptedException e) { System.err.println("sleep exception"); }
 	}
-
 }
