@@ -69,3 +69,6 @@
 /MyAudio.class
 /music.wav
 /die.mp3
+/serverOut2.class
+/outClient.class
+/inputClient$outClient.class

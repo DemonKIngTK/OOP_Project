@@ -3,98 +3,102 @@ import java.io.Serializable;
 public class BomberData implements Serializable{
 	private static final long serialVersionUID = 1L;
 	//To join Server
-	private static String Name;
-	private static String Ip;
-	private static int port;
+	private String IP;
+	private String name;
+	private String player;
+	private int poet;
+	private String ipserver;
+	private boolean start=false;
+	private boolean startGame=false;
 	
 	//Chat
-	private static String str;
+	private  String str;
 	
 	//Atibies
-	private static int Pi;
-	private static int power;
-	private static int boom;
+	private  int Pi;
+	private  int power;
+	private  int boom;
 	
 	//Move
-	private static boolean space;
-	private static boolean up;
-	private static boolean down;
-	private static boolean right;
-	private static boolean left;
-	public static String getName() {
-		return Name;
+	private  int corx;
+	private  int cory;
+	
+	public String getIP() {
+		return IP;
 	}
-	public static void setName(String name) {
-		Name = name;
+	public void setIP(String iP) {
+		IP = iP;
 	}
-	public static String getIp() {
-		return Ip;
+	public String getName() {
+		return name;
 	}
-	public static void setIp(String ip) {
-		Ip = ip;
+	public void setName(String name) {
+		this.name = name;
 	}
-	public static int getPower() {
-		return power;
+	public String getPlayer() {
+		return player;
 	}
-	public static void setPower(int power) {
-		BomberData.power = power;
+	public void setPlayer(String player) {
+		this.player = player;
 	}
-	public static int getBoom() {
-		return boom;
+	public int getPoet() {
+		return poet;
 	}
-	public static void setBoom(int boom) {
-		BomberData.boom = boom;
+	public void setPoet(int poet) {
+		this.poet = poet;
 	}
-	public static boolean isSpace() {
-		return space;
+	public boolean isStart() {
+		return start;
 	}
-	public static void setSpace(boolean space) {
-		BomberData.space = space;
+	public void setStart(boolean start) {
+		this.start = start;
 	}
-	public static boolean isUp() {
-		return up;
+	public boolean isStartGame() {
+		return startGame;
 	}
-	public static void setUp(boolean up) {
-		BomberData.up = up;
+	public void setStartGame(boolean startGame) {
+		this.startGame = startGame;
 	}
-	public static boolean isDown() {
-		return down;
-	}
-	public static void setDown(boolean down) {
-		BomberData.down = down;
-	}
-	public static boolean isRight() {
-		return right;
-	}
-	public static void setRight(boolean right) {
-		BomberData.right = right;
-	}
-	public static boolean isLeft() {
-		return left;
-	}
-	public static void setLeft(boolean left) {
-		BomberData.left = left;
-	}
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-	public static String getStr() {
+	public String getStr() {
 		return str;
 	}
-	public static void setStr(String str) {
-		BomberData.str = str;
+	public void setStr(String str) {
+		this.str = str;
 	}
-	public static int getPi() {
+	public int getPi() {
 		return Pi;
 	}
-	public static void setPi(int pi) {
+	public void setPi(int pi) {
 		Pi = pi;
 	}
-	public static int getPort() {
-		return port;
+	public int getPower() {
+		return power;
 	}
-	public static void setPort(int port) {
-		BomberData.port = port;
+	public void setPower(int power) {
+		this.power = power;
 	}
-	
+	public int getBoom() {
+		return boom;
+	}
+	public void setBoom(int boom) {
+		this.boom = boom;
+	}
+	public String getIpserver() {
+		return ipserver;
+	}
+	public void setIpserver(String ipserver) {
+		this.ipserver = ipserver;
+	}
+	public int getCorx() {
+		return corx;
+	}
+	public void setCorx(int corx) {
+		this.corx = corx;
+	}
+	public int getCory() {
+		return cory;
+	}
+	public void setCory(int cory) {
+		this.cory = cory;
+	}
 }

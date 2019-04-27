@@ -10,13 +10,13 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 public class BroadcastServer extends Thread {
 	public BroadcastServer() {
-		serverInput input = new serverInput(this);
-		serverOut output = new serverOut(this,input);
+		serverInput input = new serverInput();
+		serverOut2 output2 = new serverOut2(input);
 		start();
 		input.start();
-		output.start();
 	}
 	DatagramSocket socket;
 	DatagramPacket sendPacket;
@@ -33,8 +33,8 @@ public class BroadcastServer extends Thread {
 		        DatagramPacket packet = new DatagramPacket(recvBuf, recvBuf.length);
 		        socket.receive(packet);
 		        //Packet received
-		        System.out.println(getClass().getName() + ">>>Discovery packet received from: " + packet.getAddress().getHostAddress());
-		        System.out.println(getClass().getName() + ">>>Packet received; data: " + new String(packet.getData()));
+		        //System.out.println(getClass().getName() + ">>>Discovery packet received from: " + packet.getAddress().getHostAddress());
+		        //System.out.println(getClass().getName() + ">>>Packet received; data: " + new String(packet.getData()));
 		
 		        //See if the packet holds the right command (message)
 		        String message = new String(packet.getData()).trim();
@@ -44,6 +44,7 @@ public class BroadcastServer extends Thread {
 		          sendPacket = new DatagramPacket(sendData, sendData.length, packet.getAddress(), packet.getPort());
 		          socket.send(sendPacket);
 		          System.out.println(getClass().getName() + ">>>Sent packet to: " + sendPacket.getAddress().getHostAddress());
+		          System.out.println("####################################");
 		        }
 		      }
 	    } catch (IOException x) {
@@ -51,15 +52,12 @@ public class BroadcastServer extends Thread {
 	  }
 }
 class serverInput extends Thread{
-	BroadcastServer server;
 	ServerSocket serverSocket;
-	BomberData bomdata;
+	BomberData chatIn;
 	boolean fig = false;
 	int i=0;
-	String IP[] = new String[4];
-	int port[] = new int[4];
-	public serverInput(BroadcastServer server) {
-		this.server = server;
+	BomberData player[] = new BomberData[2];
+	public serverInput() {
 	}
 	@Override
 	public void run() {
@@ -73,30 +71,28 @@ class serverInput extends Thread{
 				input.read(data);
 				ByteArrayInputStream bi = new ByteArrayInputStream(data);
 				ObjectInputStream si = new ObjectInputStream(bi);
-				bomdata = (BomberData) si.readObject();
-				System.out.println(bomdata.getIp()+"\t\""+bomdata.getPort());
+				chatIn = (BomberData) si.readObject();
+				System.out.println(chatIn.getIP()+"\t\""+chatIn.getPoet());
 		          if(i==0) {
-		        	  IP[i]=bomdata.getIp();
-		        	  port[i]=bomdata.getPort();
+		        	  player[i]=chatIn;
 		        	  i=1;
 		          }
-		          else if(i==1) {
-		        	  IP[i]=bomdata.getIp();
-		        	  port[i]=bomdata.getPort();
+		          /*else if(i==1) {
+		        	  IP[i]=chatIn.getIP();
+		        	  port[i]=chatIn.getPoet();
 		        	  i=2; 
 		          }
 		          else if(i==2) {
-		        	  IP[i]=bomdata.getIp();
-		        	  port[i]=bomdata.getPort();
+		        	  IP[i]=chatIn.getIP();
+		        	  port[i]=chatIn.getPoet();
 		        	  i=3; 
-		          }
-		          else if(i==3) {
-		        	  IP[i]=bomdata.getIp();
-		        	  port[i]=bomdata.getPort();
-		        	  i=4;
-		        	  for (int i = 0; i < IP.length; i++) {
-							System.out.println("IP"+i+" = "+IP[i]+"   Port = "+port[i]);
-			        	  }fig=true;
+		          }*/
+		          else if(i==1) {
+		        	  player[i]=chatIn;
+		        	  i=2;
+		        	  for (int i = 0; i < player.length; i++) {
+							System.out.println("IP"+i+" = "+player[i].getIP()+"   Port = "+player[i].getPoet());
+			        	  }serverOut2 out2 = new serverOut2(this);		  
 		          }
 			}
 		} catch (IOException e) {
@@ -106,87 +102,47 @@ class serverInput extends Thread{
 		}
  	}
 }
-class serverInputData extends Thread{
-	BroadcastServer server;
-	ServerSocket serverSocket;
-	BomberData dataBom;
-	public serverInputData(BroadcastServer server) {
-		this.server = server;
-	}
-	@Override
-	public void run() {
-		super.run();
-		try {
-			serverSocket = new ServerSocket(8888);
-			while (true) {
-				Socket socket = serverSocket.accept();
-				InputStream input = socket.getInputStream();
-				byte[] data = new byte[4000];
-				input.read(data);
-				ByteArrayInputStream bi = new ByteArrayInputStream(data);
-				ObjectInputStream si = new ObjectInputStream(bi);
-				dataBom = (BomberData) si.readObject();
-			}
-		} catch (IOException e) {
-			System.err.println(e.getMessage());
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
- 	}
-}
-class serverOut extends Thread{
-	BroadcastServer server;
-	ServerSocket serverSocket;
+class serverOut2{
 	serverInput input;
-	int j=1;
-	public serverOut(BroadcastServer server,serverInput input) {
-		this.server = server;
+	int j=0;
+	public serverOut2(serverInput input){
 		this.input = input;
-	}
-	@Override
-	public void run() {
-		super.run();
-		while (true) {
-			try {
-				Thread.sleep(1);
-			} catch (InterruptedException e1) {}
-			while (input.fig) {
-				MessgeChat chat = new MessgeChat();
-				if(j==1) {
-					chat.setPlayer("Player"+j);
-					j=2;
-				}
-				else if(j==2) {
-					chat.setPlayer("Player"+j);
-					j=3;
-				}
-				else if(j==3) {
-					chat.setPlayer("Player"+j);
-					j=4;
-				}
-				else if(j==4) {
-					chat.setPlayer("Player"+j);
-					j=5;
-				}
-				chat.setIP("^_^");
+			if(j==0) {
+			for (int i = 0; i < 2; i++) {
+				try {
+					try {
+						this.input.player[i].setIpserver(InetAddress.getLocalHost().getHostAddress());
+					} catch (UnknownHostException e1) {}
+						this.input.player[i].setPi((i+1));
+						this.input.player[i].setStartGame(true);
+					byte[] serializedobject = new byte[2048];
+					ByteArrayOutputStream bo = new ByteArrayOutputStream();
+					ObjectOutputStream so = new ObjectOutputStream(bo);
+					so.writeObject(this.input.player[i]);
+					so.flush();
+					serializedobject = bo.toByteArray();
+					Socket socket2 = new Socket(this.input.player[i].getIP(),this.input.player[i].getPoet());
+					PrintStream dataout = new PrintStream(socket2.getOutputStream());
+					dataout.write(serializedobject);
+					dataout.close();
+				}catch (Exception e) {}
+			}j=1;
+			if(j==1) {
 				try {
 					byte[] serializedobject = new byte[2048];
 					ByteArrayOutputStream bo = new ByteArrayOutputStream();
 					ObjectOutputStream so = new ObjectOutputStream(bo);
-					so.writeObject(chat);
-					so.flush();
-					serializedobject = bo.toByteArray();
-					for (int i = 0; i < input.IP.length; i++) {
-						Socket socket2 = new Socket(input.IP[i],input.port[i]);
+					for (int i = 0; i < this.input.player.length; i++) {
+						so.writeObject(this.input.player[i]);
+						so.flush();
+						serializedobject = bo.toByteArray();
+						Socket socket2 = new Socket(this.input.player[i].getIP(),this.input.player[i].getPoet());
 						PrintStream dataout = new PrintStream(socket2.getOutputStream());
 						dataout.write(serializedobject);
 						dataout.close();
 					}
-					input.fig=false;
-				} catch (Exception e) {}
+				}catch (Exception e) {}
 			}
-			
+			}
 		}
-		
-	}
 }

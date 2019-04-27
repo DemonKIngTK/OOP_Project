@@ -5,22 +5,24 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.awt.*;
 
 
-class bmb extends JFrame implements KeyListener{    
-	static int xPixel1 = 70;   // Player1
-	static int yPixel1 = 90;
-	static int xPixel2 = 870; // Player2
-	static int yPixel2 = 90;
-	static int xPixel3 = 70; // Player3
-	static int yPixel3 = 540;
-	static int xPixel4 = 870; // Player4
-	static int yPixel4 = 490;
+class bmb extends JFrame{    
+	int xPixel1 = 70;   // Player1
+	int yPixel1 = 90;
+	int xPixel2 = 870; // Player2
+	int yPixel2 = 90;
+	int xPixel3 = 70; // Player3
+	int yPixel3 = 540;
+	int xPixel4 = 870; // Player4
+	int yPixel4 = 540;
 	//public JTextField Score;
 	//private JPanel panel;
-	MyAudio ad=new MyAudio();
+	MyAudio ad;
 	int ok;
-	int Player1=1,Player2=1,Player3=1,Player4=1; //Player life
-	int x1=1,y1=1,x2=17,y2=1,x3=1,y3=10,x4=17,y4=1; //coord Player1 & PLayer2
+	int Player1=1,Player2=1,Player3=1,Player4=1,sh1=0,sh2=0,sh3=0,sh4=0; //Player life
+	int x1=1,y1=1,x2=17,y2=1,x3=1,y3=10,x4=17,y4=10; //coord Player1 & PLayer2
 	long time1,time2,t1,t2;   //time form bomb & explosion
+	JFrame endgame=new JFrame("End");
+	Button Endok=new Button("Ok");
 	int v[][]= {{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,},  //map
 				{1,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,0,0,1,},
 				{1,0,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,0,1,},
@@ -66,11 +68,12 @@ class bmb extends JFrame implements KeyListener{
 		catch(Exception e) {
 			e.printStackTrace();
 		}
+		ad=new MyAudio(this);
 		setBackground(new Color(17, 120, 49));
 		setSize(1000,650);
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		addKeyListener(this);
+		addKeyListener(new MyKeyAction(this));
 		ad.playSound();
 	}
 	public void update(Graphics g) {
@@ -106,7 +109,7 @@ class bmb extends JFrame implements KeyListener{
 				repaint();
 				offScreenGraphics.drawImage(Image4, cx-20, cy-12,50,50, this);
 				long Time1 = System.nanoTime() - time1;
-				if(Time1/1000000>1000) //3 seconds explode time
+				if(Time1/1000000>1500) //3 seconds explode time
 					{
 						ok1=0;
 						boom(c2,c1,Bomb1Level);  //explode
@@ -121,7 +124,7 @@ class bmb extends JFrame implements KeyListener{
 				repaint();
 				offScreenGraphics.drawImage(Image4, cx1-20, cy1-20, this);
 				long Time2 = System.nanoTime() - time2;
-				if(Time2/1000000>1000)
+				if(Time2/1000000>1500)
 				{
 					ok2=0;
 					boom(C2,C1,Bomb2Level);
@@ -273,23 +276,35 @@ class bmb extends JFrame implements KeyListener{
 	public void die(int yy,int xx)
 	{
 		if(yy==y3&&xx==x3) {
-			Player3=0;}
+			if(sh3==0) {
+				Player3=0;
+			}else if(sh3>0){
+				sh3-=1;
+			}
+		}
 		if(yy==y2&&xx==x2) {
 			Player2=0;}
 		if(yy==y1&&xx==x1) {
 			Player1=0;}
 		if(yy==y4&&xx==x4) {
 			Player4=0;}
+		end(Player1,Player2,Player3,Player4);
+		
 	}
 	public void end(int p1,int p2,int p3,int p4) {
-		if(p1==1&&p2==0&&p3==0&&p4==0) {
-			
+		
+		endgame.setSize(300, 300);
+		endgame.setLocationRelativeTo(null);
+		Endok.setBounds(150, 100, 60, 40);
+		endgame.add(Endok);
+		if(p1==1&&p2==0&&p3==0&&p4==0) {	
+			endgame.setVisible(true);
 		}else if(p1==0&&p2==1&&p3==0&&p4==0) {
-			
+			endgame.setVisible(true);
 		}else if(p1==0&&p2==0&&p3==1&&p4==0) {
-			
+			endgame.setVisible(true);
 		}else if(p1==0&&p2==0&&p3==0&&p4==1) {
-			
+			endgame.setVisible(true);
 		}
 	}
 	public void power(int a,int b)
@@ -322,6 +337,9 @@ class bmb extends JFrame implements KeyListener{
 		}else if(v[a][b]==4) {
 			if(player==1)
 			{
+				if(sh3<1) {
+					sh3++;
+				}
 				v[a][b]=0;
 			}
 		else {
@@ -335,110 +353,49 @@ class bmb extends JFrame implements KeyListener{
 			return 1;
 		return 0;
 	}
-	public void keyPressed(KeyEvent ke) {
-		if(Player3>0)
-		{switch (ke.getKeyCode()) {
-		case KeyEvent.VK_RIGHT: {
-			{
-				if(valid(y3,x3+1)==1)
-				{
-					xPixel3+=50;
-					x3++;
-					atrib(y3,x3,1);
-				}
-			}
-		}
-		break;
-		case KeyEvent.VK_LEFT: {
-			{
-				if(valid(y3,x3-1)==1)
-				{
-					xPixel3-=50;
-					x3--;
-					atrib(y3,x3,1);
-				}
-			}
-		}
-		break;
-		case KeyEvent.VK_DOWN: {
-			{
-				if(valid(y3+1,x3)==1)
-				{
-					yPixel3+=50;
-					y3++;
-					atrib(y3,x3,1);
-				}
-			};
-		}
-		break;
-		case KeyEvent.VK_UP: {
-			{
-				if(valid(y3-1,x3)==1)
-				{
-					yPixel3-=50;
-					y3--;
-					atrib(y3,x3,1);
-				}
-			}
-		}
-		break;
-		case '/': {
-			{
-				if(ok1==0&&bomb1==0)
-				{ok1=1;
-				cx=xPixel3+20;
-				c1=x3;
-				cy=yPixel3+10;
-				c2=y3;
-				v[c2][c1]=5;
-				time1=System.nanoTime();}
-			}
-		}
-		break;
-		}}
-		repaint();
-		if(Player4>0)
+	
+		/*if(Player2>0)
 		{switch (ke.getKeyChar()) {
 		case 'd': {
 			{
-				if(valid(y4,x4+1)==1)
+				if(valid(y2,x2+1)==1)
 				{
-					xPixel4+=50;
-					x4++;
-					atrib(y4,x4,2);
+					xPixel2+=50;
+					x2++;
+					atrib(y2,x2,2);
 				}
 			}
 		}
 		break;
 		case 'a': {
 			{
-				if(valid(y4,x4-1)==1)
+				if(valid(y2,x2-1)==1)
 				{
-					xPixel4-=50;
-					x4--;
-					atrib(y4,x4,2);
+					xPixel2-=50;
+					x2--;
+					atrib(y2,x2,2);
 				}
 			}
 		}
 		break;
 		case 's': {
 			{
-				if(valid(y4+1,x4)==1)
+				if(valid(y2+1,x2)==1)
 				{
-					yPixel4+=50;
-					y4++;
-					atrib(y4,x4,2);
+					yPixel2+=50;
+					y2++;
+					atrib(y2,x2,2);
 				}
 			};
 		}
 		break;
 		case 'w': {
 			{
-				if(valid(y4-1,x4)==1)
+				if(valid(y2-1,x2)==1)
 				{
-					yPixel4-=50;
-					y4--;
-					atrib(y4,x4,2);
+					yPixel2-=50;
+					y2--;
+					atrib(y2,x2,2);
 				}
 			}
 		}
@@ -448,10 +405,10 @@ class bmb extends JFrame implements KeyListener{
 			if(ok2==0&&bomb2==0)
 			{
 			ok2=1;
-			cx1=xPixel4+20;
-			C1=x1;
-			cy1=yPixel4+10;
-			C2=y1;
+			cx1=xPixel2+20;
+			C1=x2;
+			cy1=yPixel2+10;
+			C2=y2;
 			time2=System.nanoTime();
 			v[C2][C1]=5;
 			}
@@ -461,16 +418,6 @@ class bmb extends JFrame implements KeyListener{
 		}
 		}
 		repaint();
-	}
-	public static void main(String[] args) {
-		bmb game=new bmb();
-	}
-	//When a key is typed (once)
-	public void keyTyped(KeyEvent ke) {}    
-	//When a key is released (typed or pressed)
-	public void keyReleased(KeyEvent ke) {
-		repaint();
-		try { Thread.sleep(50); }   
-		catch (InterruptedException e) { System.err.println("sleep exception"); }
-	}
+	}*/
+	
 }

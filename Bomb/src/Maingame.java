@@ -21,13 +21,13 @@ public class Maingame {
 		MyFrame Login=new MyFrame("Login");
 		MyFrame Lobby=new MyFrame();
 		guiFrame giu = new guiFrame();
-		MessgeChat data = new MessgeChat();
+		BomberData data = new BomberData();
 		giu.back.startServer.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				giu.server =new BroadcastServer();
-				giu.input = new serverInput(giu.server);
+				giu.input = new serverInput();
 			}
 		});
 		giu.back.jion.addActionListener(new ActionListener() {
@@ -68,7 +68,7 @@ public class Maingame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Lobby.setVisible(false);
-				MessgeChat chat = new MessgeChat();
+				BomberData chat = new BomberData();
 				try {
 					chat.setIP(InetAddress.getLocalHost().getHostAddress());
 				} catch (UnknownHostException e1) {

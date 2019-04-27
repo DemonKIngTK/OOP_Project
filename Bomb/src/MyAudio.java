@@ -7,6 +7,11 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.DataLine;
 
 public class MyAudio {
+	bmb game;
+	public MyAudio(bmb game) {
+		// TODO Auto-generated constructor stub
+		this.game=game;
+	}
 	void playSound() {
 		try {
 			AudioInputStream stream;

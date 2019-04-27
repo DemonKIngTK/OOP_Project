@@ -69,35 +69,23 @@ class MyClient {
 		  c.receive(receivePacket);
 		  //We have a response
 		  System.out.println( ">>> Broadcast response from server: " + receivePacket.getAddress().getHostAddress());
-//		  //Check if the message is correct
-//		  String message = new String(receivePacket.getData()).trim();
-//		  if (message.equals("Game")) {
-		    //DO SOMETHING WITH THE SERVER'S IP (for example, store it in your controller)
-//			  fream.area.append("Helle Word!!\n");
-			 // System.out.println( ">>> Broadcast response from server: " + receivePacket.getAddress().getHostAddress());
-		    //Controller_Base.setServerIp(receivePacket.getAddress());
-//		  }
-		  //Close the port!
 		  c.close();
 		} catch (IOException ex) {
 		  //Logger.getLogger(LoginWindow.class.getName()).log(Level.SEVERE, null, ex);
 		}
 		//System.out.println(receivePacket.getAddress().getHostAddress());
-		BomberData bomdata = new BomberData();
+		BomberData chat = new BomberData();
 		try {
-			bomdata.setIp(InetAddress.getLocalHost().getHostAddress());
-		} catch (UnknownHostException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		bomdata.setPort(9999);
+			chat.setIP(InetAddress.getLocalHost().getHostAddress());
+		} catch (UnknownHostException e1) {}
+		chat.setPoet(9990);
 		byte[] data = new byte[2048];
 		
 		ByteArrayOutputStream bo = new ByteArrayOutputStream();
 		ObjectOutputStream so;
 		try {
 			so = new ObjectOutputStream(bo);
-			so.writeObject(bomdata);
+			so.writeObject(chat);
 			so.flush();
 			data = bo.toByteArray();
 			Socket socket = new Socket(receivePacket.getAddress().getHostAddress(), 8888);
@@ -111,44 +99,74 @@ class MyClient {
 }
 class inputClient extends Thread{
 	ServerSocket clientSocket;
-	MessgeChat chatIn;
+	BomberData chatIn;
 	MyFrame frame;
+	int i=0;
 	public inputClient(MyFrame frame) {
-		this.frame = frame;
+		this.frame=frame;
 	}
 	@Override
 	public void run() {
 		super.run();
 		try {
-			MessgeChat chat = new MessgeChat();
+			BomberData chat = new BomberData();
 			clientSocket = new ServerSocket(9990);
 			while (true) {
-				Socket socket = clientSocket.accept();
-				InputStream input = socket.getInputStream();
-				byte[] data = new byte[2048];
-				input.read(data);
-				ByteArrayInputStream bi = new ByteArrayInputStream(data);
-				ObjectInputStream si = new ObjectInputStream(bi);
-				chatIn = (MessgeChat) si.readObject();
-				System.out.println(chatIn.getIP()+"\t"+chatIn.getPlayer()+"\n");
-				chat.setPlayer(chatIn.getPlayer());
-				if(chat.getPlayer().equals("Player1")) {
+				
+					Socket socket = clientSocket.accept();
+					InputStream input = socket.getInputStream();
+					byte[] data = new byte[2048];
+					input.read(data);
+					ByteArrayInputStream bi = new ByteArrayInputStream(data);
+					ObjectInputStream si = new ObjectInputStream(bi);
+					chatIn = (BomberData) si.readObject();
+					if(i==0) {
+					System.out.println(chatIn.getIpserver()+"\t"+chatIn.getIP()+"\t"+chatIn.getPi()+"\n");
+					chat.setPlayer(chatIn.getPlayer());
+					chat.setIpserver(chatIn.getIpserver());
+					i++;
+					}
+					else if(chatIn.isStartGame()){
+							bmb game = new bmb();	
+							if(i==2) {
+								if(chatIn.getPi()==1) {
+									game.x1=chatIn.getCorx();
+									game.y1=chatIn.getCory();
+									}
+								}
+							}
+							
+					}
 					
-				}else if(chat.getPlayer().equals("Player2")) {
-					
-				}
-				if(chatIn.isStart()) {
-					frame.address=chatIn.getIP();
-					frame.btnStart.setVisible(true);
-				}
-				else if(chatIn.isStartGame()){
-					bmb bmb = new bmb();
-				}
-			}
-		} catch (IOException e) {
+			
+		}
+		catch (IOException e) {
 			System.err.println(e.getMessage());
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
 }
+
+class outClient{
+	public outClient() {
+		BomberData chat = new BomberData();
+		byte[] data = new byte[2048];
+		ByteArrayOutputStream bo = new ByteArrayOutputStream();
+		ObjectOutputStream so;
+		try {
+			so = new ObjectOutputStream(bo);
+			so.writeObject(chat);
+			so.flush();
+			data = bo.toByteArray();
+			Socket socket = new Socket(chat.getIpserver(), 8888);
+			PrintStream dataOut = new PrintStream(socket.getOutputStream());
+			dataOut.write(data);
+			dataOut.close();
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+}
+
+

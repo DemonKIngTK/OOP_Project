@@ -18,7 +18,7 @@ public class guiFrame extends JFrame{
 	inputClient client2;
 	Back back=new Back();
 	public guiFrame() {
-		setSize(1000,600);
+		setSize(1000,580);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
 		setLocationRelativeTo(null);
