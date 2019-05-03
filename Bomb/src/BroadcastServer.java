@@ -12,14 +12,14 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 public class BroadcastServer extends Thread {
+	DatagramSocket socket;
+	DatagramPacket sendPacket;
 	public BroadcastServer() {
 		serverInput input = new serverInput();
 		serverOut2 output2 = new serverOut2(input);
 		start();
 		input.start();
 	}
-	DatagramSocket socket;
-	DatagramPacket sendPacket;
 	  @Override
 	  public void run() {
 	    try {
@@ -72,7 +72,7 @@ class serverInput extends Thread{
 				ByteArrayInputStream bi = new ByteArrayInputStream(data);
 				ObjectInputStream si = new ObjectInputStream(bi);
 				chatIn = (BomberData) si.readObject();
-				System.out.println(chatIn.getIP()+"\t\""+chatIn.getPoet());
+				System.out.println(chatIn.getIP()+"\t\""+chatIn.getPort());
 		          if(i==0) {
 		        	  player[i]=chatIn;
 		        	  i=1;
@@ -91,7 +91,7 @@ class serverInput extends Thread{
 		        	  player[i]=chatIn;
 		        	  i=2;
 		        	  for (int i = 0; i < player.length; i++) {
-							System.out.println("IP"+i+" = "+player[i].getIP()+"   Port = "+player[i].getPoet());
+							System.out.println("IP"+i+" = "+player[i].getIP()+"   Port = "+player[i].getPort());
 			        	  }serverOut2 out2 = new serverOut2(this);		  
 		          }
 			}
@@ -121,7 +121,7 @@ class serverOut2{
 					so.writeObject(this.input.player[i]);
 					so.flush();
 					serializedobject = bo.toByteArray();
-					Socket socket2 = new Socket(this.input.player[i].getIP(),this.input.player[i].getPoet());
+					Socket socket2 = new Socket(this.input.player[i].getIP(),this.input.player[i].getPort());
 					PrintStream dataout = new PrintStream(socket2.getOutputStream());
 					dataout.write(serializedobject);
 					dataout.close();
@@ -136,7 +136,7 @@ class serverOut2{
 						so.writeObject(this.input.player[i]);
 						so.flush();
 						serializedobject = bo.toByteArray();
-						Socket socket2 = new Socket(this.input.player[i].getIP(),this.input.player[i].getPoet());
+						Socket socket2 = new Socket(this.input.player[i].getIP(),this.input.player[i].getPort());
 						PrintStream dataout = new PrintStream(socket2.getOutputStream());
 						dataout.write(serializedobject);
 						dataout.close();

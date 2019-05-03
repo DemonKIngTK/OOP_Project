@@ -6,7 +6,7 @@ public class BomberData implements Serializable{
 	private String IP;
 	private String name;
 	private String player;
-	private int poet;
+	private int port;
 	private String ipserver;
 	private boolean start=false;
 	private boolean startGame=false;
@@ -20,9 +20,11 @@ public class BomberData implements Serializable{
 	private  int boom;
 	
 	//Move
-	private  int corx;
-	private  int cory;
-	
+	private  boolean space;
+	private  boolean up;
+	private  boolean down;
+	private  boolean right;
+	private  boolean left;
 	public String getIP() {
 		return IP;
 	}
@@ -41,11 +43,11 @@ public class BomberData implements Serializable{
 	public void setPlayer(String player) {
 		this.player = player;
 	}
-	public int getPoet() {
-		return poet;
+	public int getPort() {
+		return port;
 	}
-	public void setPoet(int poet) {
-		this.poet = poet;
+	public void setPort(int poet) {
+		this.port = port;
 	}
 	public boolean isStart() {
 		return start;
@@ -83,22 +85,40 @@ public class BomberData implements Serializable{
 	public void setBoom(int boom) {
 		this.boom = boom;
 	}
+	public boolean isSpace() {
+		return space;
+	}
+	public void setSpace(boolean space) {
+		this.space = space;
+	}
+	public boolean isUp() {
+		return up;
+	}
+	public void setUp(boolean up) {
+		this.up = up;
+	}
+	public boolean isDown() {
+		return down;
+	}
+	public void setDown(boolean down) {
+		this.down = down;
+	}
+	public boolean isRight() {
+		return right;
+	}
+	public void setRight(boolean right) {
+		this.right = right;
+	}
+	public boolean isLeft() {
+		return left;
+	}
+	public void setLeft(boolean left) {
+		this.left = left;
+	}
 	public String getIpserver() {
 		return ipserver;
 	}
 	public void setIpserver(String ipserver) {
 		this.ipserver = ipserver;
-	}
-	public int getCorx() {
-		return corx;
-	}
-	public void setCorx(int corx) {
-		this.corx = corx;
-	}
-	public int getCory() {
-		return cory;
-	}
-	public void setCory(int cory) {
-		this.cory = cory;
 	}
 }

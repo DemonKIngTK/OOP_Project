@@ -78,7 +78,7 @@ class MyClient {
 		try {
 			chat.setIP(InetAddress.getLocalHost().getHostAddress());
 		} catch (UnknownHostException e1) {}
-		chat.setPoet(9990);
+		chat.setPort(9990);
 		byte[] data = new byte[2048];
 		
 		ByteArrayOutputStream bo = new ByteArrayOutputStream();
@@ -103,7 +103,7 @@ class inputClient extends Thread{
 	MyFrame frame;
 	int i=0;
 	public inputClient(MyFrame frame) {
-		this.frame=frame;
+		this.frame = frame;
 	}
 	@Override
 	public void run() {
@@ -112,42 +112,36 @@ class inputClient extends Thread{
 			BomberData chat = new BomberData();
 			clientSocket = new ServerSocket(9990);
 			while (true) {
-				
-					Socket socket = clientSocket.accept();
-					InputStream input = socket.getInputStream();
-					byte[] data = new byte[2048];
-					input.read(data);
-					ByteArrayInputStream bi = new ByteArrayInputStream(data);
-					ObjectInputStream si = new ObjectInputStream(bi);
-					chatIn = (BomberData) si.readObject();
+				Socket socket = clientSocket.accept();
+				InputStream input = socket.getInputStream();
+				byte[] data = new byte[2048];
+				input.read(data);
+				ByteArrayInputStream bi = new ByteArrayInputStream(data);
+				ObjectInputStream si = new ObjectInputStream(bi);
+				chatIn = (BomberData) si.readObject();
+				System.out.println(chatIn.getIpserver()+"\t"+chatIn.getIP()+"\t"+chatIn.getPi()+"\n");
+				chat.setPlayer(chatIn.getPlayer());
+				chat.setIpserver(chatIn.getIpserver());
+				if(chatIn.isStart()) {
+					frame.address=chatIn.getIP();
+					frame.btnStart.setVisible(true);
+				}
+				else if(chatIn.isStartGame()){
 					if(i==0) {
-					System.out.println(chatIn.getIpserver()+"\t"+chatIn.getIP()+"\t"+chatIn.getPi()+"\n");
-					chat.setPlayer(chatIn.getPlayer());
-					chat.setIpserver(chatIn.getIpserver());
-					i++;
-					}
-					else if(chatIn.isStartGame()){
-							bmb game = new bmb();	
-							if(i==2) {
-								if(chatIn.getPi()==1) {
-									game.x1=chatIn.getCorx();
-									game.y1=chatIn.getCory();
-									}
-								}
-							}
-							
+						bmb bmb = new bmb();
+						i++;
 					}
 					
-			
-		}
-		catch (IOException e) {
+				}
+				
+			}
+		} catch (IOException e) {
 			System.err.println(e.getMessage());
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
 }
-
 class outClient{
 	public outClient() {
 		BomberData chat = new BomberData();
@@ -168,5 +162,3 @@ class outClient{
 		}
 	}
 }
-
-

@@ -1,50 +1,20 @@
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-
-public class MyKeyAction implements KeyListener{
-	bmb game;
-	BomberData bomdata;
-	outClient Clout;
-	public MyKeyAction(bmb game) {
-		// TODO Auto-generated constructor stub
-		this.game=game;
+public class MyKeyAction extends KeyAdapter{
+	bmb bmb;
+	public MyKeyAction(bmb bmb) {
+		this.bmb = bmb;
 	}
-	@Override
-	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	@Override
 	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
-		if (e.getKeyCode()==KeyEvent.VK_RIGHT) {
-			
-			
+		super.keyPressed(e);
+		bmb.keyPressed(e);
+		System.out.println("true");
 	}
-	else if(e.getKeyCode()== KeyEvent.VK_LEFT) {
-		
-			
-		}
-	else if(e.getKeyCode()==KeyEvent.VK_DOWN){
-		
-			
-		}
-	else if	(e.getKeyCode()==KeyEvent.VK_UP) {
-
-			
-		}
-	else if(e.getKeyCode()==KeyEvent.VK_SPACE) {
-
-			
-		}
-		
-	}
-
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stu
-		
+		super.keyReleased(e);
+		bmb.keyReleased(e);
+		System.out.println("flaot");
 	}
-
 }

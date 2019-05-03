@@ -5,11 +5,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.PrintStream;
-import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -23,11 +21,9 @@ public class Maingame {
 		guiFrame giu = new guiFrame();
 		BomberData data = new BomberData();
 		giu.back.startServer.addActionListener(new ActionListener() {
-			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				giu.server =new BroadcastServer();
-				giu.input = new serverInput();
 			}
 		});
 		giu.back.jion.addActionListener(new ActionListener() {
@@ -75,7 +71,7 @@ public class Maingame {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				chat.setPoet(9990);
+				chat.setPort(9990);
 				byte[] data = new byte[2048];
 				
 				ByteArrayOutputStream bo = new ByteArrayOutputStream();
