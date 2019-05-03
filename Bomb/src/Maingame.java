@@ -152,8 +152,7 @@ class MyFrame extends JFrame{
 		getContentPane().add(labelP3);
 		
 		btnStart.setBounds(520, 300, 254, 35);
-		btnStart.setVisible(false);
-		getContentPane().add(btnStart);
+
 	}
 	MyFrame(String title){
 		setSize( 500, 300);

@@ -26,7 +26,7 @@ public class Client implements KeyListener{
 			so.writeObject(this.chat);
 			so.flush();
 			data = bo.toByteArray();
-			Socket socket = new Socket("10.160.61.112", 8888);
+			Socket socket = new Socket("192.168.43.106", 8890);
 			PrintStream dataOut = new PrintStream(socket.getOutputStream());
 			dataOut.write(data);
 			dataOut.close();
@@ -92,7 +92,7 @@ class inputClientTest extends Thread{
 		super.run();
 		ServerSocket serverSocket;
 		try {
-			serverSocket = new ServerSocket(9990);
+			serverSocket = new ServerSocket(10000);
 			while (true) {	
 				Socket socket = serverSocket.accept();
 				InputStream input = socket.getInputStream();
@@ -103,7 +103,7 @@ class inputClientTest extends Thread{
 				chatIn = (BomberData) si.readObject();
 				System.out.println("Player "+chatIn.getPi()+"Down="+chatIn.isDown()+"\nLeft="+chatIn.isLeft()+"\nRight="+chatIn.isRight()
 										+"\nSpace="+chatIn.isSpace()+"\nUp="+chatIn.isUp());
-				if(chatIn.getPi()==1) {
+				if(chatIn.getPi()==0) {
 					if(chatIn.isRight()) {
 						if(game.valid(game.y1,game.x1+1)==1)
 						{
@@ -144,7 +144,7 @@ class inputClientTest extends Thread{
 						game.time1=System.nanoTime();}
 					}
 					}
-				else if(chatIn.getPi()==2) {
+				else if(chatIn.getPi()==1) {
 					if(chatIn.isRight()) {
 						if(game.valid(game.y2,game.x2+1)==1)
 						{
@@ -182,8 +182,8 @@ class inputClientTest extends Thread{
 							game.C1=game.x2;
 							game.cy1=game.yPixel2+10;
 							game.C2=game.y2;
-							game.v[game.C2][game.C1]=5;
-							game.time1=System.nanoTime();}
+							game.time2=System.nanoTime();
+							game.v[game.C2][game.C1]=5;}
 					}
 					
 					}

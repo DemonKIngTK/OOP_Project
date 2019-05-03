@@ -75,6 +75,7 @@ class serverInput extends Thread{
 				System.out.println(chatIn.getIP()+"\t\""+chatIn.getPort());
 		          if(i==0) {
 		        	  player[i]=chatIn;
+		        	  player[i].setPi(i);
 		        	  i=1;
 		          }
 		          /*else if(i==1) {
@@ -89,6 +90,7 @@ class serverInput extends Thread{
 		          }*/
 		          else if(i==1) {
 		        	  player[i]=chatIn;
+		        	  player[i].setPi(i);
 		        	  i=2;
 		        	  for (int i = 0; i < player.length; i++) {
 							System.out.println("IP"+i+" = "+player[i].getIP()+"   Port = "+player[i].getPort());
@@ -121,7 +123,7 @@ class serverOut2{
 					so.writeObject(this.input.player[i]);
 					so.flush();
 					serializedobject = bo.toByteArray();
-					Socket socket2 = new Socket(this.input.player[i].getIP(),this.input.player[i].getPort());
+					Socket socket2 = new Socket(this.input.player[i].getIP(),9990);
 					PrintStream dataout = new PrintStream(socket2.getOutputStream());
 					dataout.write(serializedobject);
 					dataout.close();

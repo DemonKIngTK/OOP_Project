@@ -124,7 +124,7 @@ class inputClient extends Thread{
 				chat.setIpserver(chatIn.getIpserver());
 				if(chatIn.isStart()) {
 					frame.address=chatIn.getIP();
-					frame.btnStart.setVisible(true);
+					frame.add(frame.btnStart);
 				}
 				else if(chatIn.isStartGame()){
 					if(i==0) {

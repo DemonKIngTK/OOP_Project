@@ -20,8 +20,9 @@ public class serverGame extends Thread{
 	
 	public void run() {
 		try {
-			ServerSocket serverSocket = new ServerSocket(8888);
+			ServerSocket serverSocket = new ServerSocket(8890);
 			while (true) {
+				System.out.println(555);
 				Socket socket = serverSocket.accept();
 				InputStream input = socket.getInputStream();
 				byte[] data = new byte[2048];
@@ -36,21 +37,28 @@ public class serverGame extends Thread{
 }
 class serverOutputTest{
 	BomberData chat;
+	Socket socket2;
 	public serverOutputTest(BomberData chat) {
 		this.chat = chat;
-		byte[] data = new byte[2048];
-		ByteArrayOutputStream bo = new ByteArrayOutputStream();
-		ObjectOutputStream so;
+		
 		try {
-			chat.setPi(1);
-			so = new ObjectOutputStream(bo);
-			so.writeObject(this.chat);
-			so.flush();
-			data = bo.toByteArray();
-			Socket socket = new Socket("10.160.61.112", 9990);
-			PrintStream dataOut = new PrintStream(socket.getOutputStream());
-			dataOut.write(data);
-			dataOut.close();
+			for (int i = 0; i < 2; i++) {
+				byte[] data = new byte[2048];
+				ByteArrayOutputStream bo = new ByteArrayOutputStream();
+				ObjectOutputStream so =new ObjectOutputStream(bo);
+				so.writeObject(chat);
+				so.flush();
+				data = bo.toByteArray();
+				if(i==0) {
+					socket2 = new Socket("192.168.43.106",10000);
+				}else {
+					socket2 = new Socket("192.168.43.120",10000);
+				}
+				
+				PrintStream dataout = new PrintStream(socket2.getOutputStream());
+				dataout.write(data);
+				dataout.close();
+			}
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		}
