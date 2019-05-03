@@ -20,7 +20,7 @@ public class serverGame extends Thread{
 	
 	public void run() {
 		try {
-			ServerSocket serverSocket = new ServerSocket(8890);
+			ServerSocket serverSocket = new ServerSocket(9999);
 			while (true) {
 				System.out.println(555);
 				Socket socket = serverSocket.accept();
@@ -52,7 +52,7 @@ class serverOutputTest{
 				if(i==0) {
 					socket2 = new Socket("192.168.43.106",10000);
 				}else {
-					socket2 = new Socket("192.168.43.120",10000);
+					socket2 = new Socket("192.168.43.204",10000);
 				}
 				
 				PrintStream dataout = new PrintStream(socket2.getOutputStream());

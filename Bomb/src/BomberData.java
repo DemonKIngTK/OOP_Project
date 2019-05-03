@@ -16,8 +16,8 @@ public class BomberData implements Serializable{
 	
 	//Atibies
 	private  int Pi;
-	private  int power;
-	private  int boom;
+	private  int item;
+	
 	
 	//Move
 	private  boolean space;
@@ -72,18 +72,6 @@ public class BomberData implements Serializable{
 	}
 	public void setPi(int pi) {
 		Pi = pi;
-	}
-	public int getPower() {
-		return power;
-	}
-	public void setPower(int power) {
-		this.power = power;
-	}
-	public int getBoom() {
-		return boom;
-	}
-	public void setBoom(int boom) {
-		this.boom = boom;
 	}
 	public boolean isSpace() {
 		return space;

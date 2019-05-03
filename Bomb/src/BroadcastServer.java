@@ -93,7 +93,7 @@ class serverInput extends Thread{
 		        	  player[i].setPi(i);
 		        	  i=2;
 		        	  for (int i = 0; i < player.length; i++) {
-							System.out.println("IP"+i+" = "+player[i].getIP()+"   Port = "+player[i].getPort());
+							System.out.println("IP"+i+" = "+player[i].getIP()+"   Port = "+player[i].getPort()+player[i].getPi());
 			        	  }serverOut2 out2 = new serverOut2(this);		  
 		          }
 			}

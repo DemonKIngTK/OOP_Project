@@ -26,7 +26,7 @@ public class Client implements KeyListener{
 			so.writeObject(this.chat);
 			so.flush();
 			data = bo.toByteArray();
-			Socket socket = new Socket("192.168.43.106", 8890);
+			Socket socket = new Socket(chat.getIpserver(), 9999);
 			PrintStream dataOut = new PrintStream(socket.getOutputStream());
 			dataOut.write(data);
 			dataOut.close();
@@ -101,7 +101,7 @@ class inputClientTest extends Thread{
 				ByteArrayInputStream bi = new ByteArrayInputStream(data);
 				ObjectInputStream si = new ObjectInputStream(bi);
 				chatIn = (BomberData) si.readObject();
-				System.out.println("Player "+chatIn.getPi()+"Down="+chatIn.isDown()+"\nLeft="+chatIn.isLeft()+"\nRight="+chatIn.isRight()
+				System.out.println("Player "+chatIn.getPi()+"\nDown="+chatIn.isDown()+"\nLeft="+chatIn.isLeft()+"\nRight="+chatIn.isRight()
 										+"\nSpace="+chatIn.isSpace()+"\nUp="+chatIn.isUp());
 				if(chatIn.getPi()==0) {
 					if(chatIn.isRight()) {
@@ -136,9 +136,9 @@ class inputClientTest extends Thread{
 					}else if(chatIn.isSpace()) {
 						if(game.ok1==0&&game.bomb1==0)
 						{game.ok1=1;
-						game.cx=game.xPixel1+20;
+						game.cx1=game.xPixel1+20;
 						game.c1=game.x1;
-						game.cy=game.yPixel1+10;
+						game.cy1=game.yPixel1+10;
 						game.c2=game.y1;
 						game.v[game.c2][game.c1]=5;
 						game.time1=System.nanoTime();}
@@ -150,7 +150,7 @@ class inputClientTest extends Thread{
 						{
 							game.xPixel2+=50;
 							game.x2++;
-							game.atrib(game.y2,game.x2,1);
+							game.atrib(game.y2,game.x2,2);
 						}
 					}
 					else if(chatIn.isLeft()) {
@@ -165,28 +165,113 @@ class inputClientTest extends Thread{
 						{
 							game.yPixel2-=50;
 							game.y2--;
-							game.atrib(game.y2,game.x2,1);
+							game.atrib(game.y2,game.x2,2);
 						}
 					}else if(chatIn.isDown()) {
 						if(game.valid(game.y2+1,game.x2)==1)
 						{
 							game.yPixel2+=50;
 							game.y2++;
-							game.atrib(game.y2,game.x2,1);
+							game.atrib(game.y2,game.x2,2);
 						}
 					}else if(chatIn.isSpace()) {
 						if(game.ok2==0&&game.bomb2==0)
 						{
 							game.ok2=1;
-							game.cx1=game.xPixel2+20;
+							game.cx2=game.xPixel2+20;
 							game.C1=game.x2;
-							game.cy1=game.yPixel2+10;
+							game.cy2=game.yPixel2+10;
 							game.C2=game.y2;
 							game.time2=System.nanoTime();
 							game.v[game.C2][game.C1]=5;}
 					}
 					
 					}
+				else if(chatIn.getPi()==2) {
+					if(chatIn.isRight()) {
+						if(game.valid(game.y3,game.x3+1)==1)
+						{
+							game.xPixel3+=50;
+							game.x3++;
+							game.atrib(game.y3,game.x3,3);
+						}
+					}
+					else if(chatIn.isLeft()) {
+						if(game.valid(game.y3,game.x3-1)==1)
+						{
+							game.xPixel3-=50;
+							game.x3--;
+							game.atrib(game.y3,game.x3,3);
+						}
+					}else if(chatIn.isUp()) {
+						if(game.valid(game.y3-1,game.x3)==1)
+						{
+							game.yPixel3-=50;
+							game.y3--;
+							game.atrib(game.y3,game.x3,3);
+						}
+					}else if(chatIn.isDown()) {
+						if(game.valid(game.y3+1,game.x3)==1)
+						{
+							game.yPixel3+=50;
+							game.y3++;
+							game.atrib(game.y3,game.x3,3);
+						}
+					}else if(chatIn.isSpace()) {
+						if(game.ok3==0&&game.bomb3==0)
+						{
+							game.ok3=1;
+							game.cx3=game.xPixel3+20;
+							game.a3=game.x3;
+							game.cy3=game.yPixel3+10;
+							game.a23=game.y3;
+							game.time3=System.nanoTime();
+							game.v[game.a23][game.a3]=5;}
+					}
+					
+					}
+				if(chatIn.getPi()==3) {
+					if(chatIn.isRight()) {
+						if(game.valid(game.y4,game.x4+1)==1)
+						{
+							game.xPixel4+=50;
+							game.x4++;
+							game.atrib(game.y4,game.x4,4);
+						}
+					}
+					else if(chatIn.isLeft()) {
+						if(game.valid(game.y4,game.x4-1)==1)
+						{
+							game.xPixel4-=50;
+							game.x4--;
+							game.atrib(game.y4,game.x4,4);
+						}
+					}else if(chatIn.isUp()) {
+						if(game.valid(game.y4-1,game.x4)==1)
+						{
+							game.yPixel4-=50;
+							game.y4--;
+							game.atrib(game.y4,game.x4,4);
+						}
+					}else if(chatIn.isDown()) {
+						if(game.valid(game.y4+1,game.x4)==1)
+						{
+							game.yPixel4+=50;
+							game.y4++;
+							game.atrib(game.y4,game.x4,4);
+						}
+					}else if(chatIn.isSpace()) {
+						if(game.ok4==0&&game.bomb4==0)
+						{game.ok4=1;
+						game.cx4=game.xPixel4+20;
+						game.A14=game.x4;
+						game.cy4=game.yPixel4+10;
+						game.A24=game.y4;
+						game.v[game.A24][game.A14]=5;
+						game.time4=System.nanoTime();}
+					}
+					}
+				
 				game.repaint();
 				}
 				

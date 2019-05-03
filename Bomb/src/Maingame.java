@@ -24,6 +24,8 @@ public class Maingame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				giu.server =new BroadcastServer();
+				serverGame run = new serverGame(new BomberData());
+				run.start();
 			}
 		});
 		giu.back.jion.addActionListener(new ActionListener() {

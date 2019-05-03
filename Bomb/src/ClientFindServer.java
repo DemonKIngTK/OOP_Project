@@ -1,3 +1,5 @@
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -77,10 +79,9 @@ class MyClient {
 		BomberData chat = new BomberData();
 		try {
 			chat.setIP(InetAddress.getLocalHost().getHostAddress());
+			chat.setPort(9990);
 		} catch (UnknownHostException e1) {}
-		chat.setPort(9990);
 		byte[] data = new byte[2048];
-		
 		ByteArrayOutputStream bo = new ByteArrayOutputStream();
 		ObjectOutputStream so;
 		try {
@@ -101,6 +102,7 @@ class inputClient extends Thread{
 	ServerSocket clientSocket;
 	BomberData chatIn;
 	MyFrame frame;
+	BomberData chat = new BomberData();
 	int i=0;
 	public inputClient(MyFrame frame) {
 		this.frame = frame;
@@ -109,7 +111,6 @@ class inputClient extends Thread{
 	public void run() {
 		super.run();
 		try {
-			BomberData chat = new BomberData();
 			clientSocket = new ServerSocket(9990);
 			while (true) {
 				Socket socket = clientSocket.accept();
@@ -119,16 +120,17 @@ class inputClient extends Thread{
 				ByteArrayInputStream bi = new ByteArrayInputStream(data);
 				ObjectInputStream si = new ObjectInputStream(bi);
 				chatIn = (BomberData) si.readObject();
-				System.out.println(chatIn.getIpserver()+"\t"+chatIn.getIP()+"\t"+chatIn.getPi()+"\n");
+				System.out.println(chatIn.getIpserver()+"\t"+chatIn.getIP()+"\t"+chatIn.getPi()+"\t"+chatIn.getPort()+"\n");
 				chat.setPlayer(chatIn.getPlayer());
 				chat.setIpserver(chatIn.getIpserver());
 				if(chatIn.isStart()) {
 					frame.address=chatIn.getIP();
-					frame.add(frame.btnStart);
+					frame.btnStart.setVisible(true);
 				}
 				else if(chatIn.isStartGame()){
 					if(i==0) {
 						bmb bmb = new bmb();
+						
 						i++;
 					}
 					
@@ -142,8 +144,11 @@ class inputClient extends Thread{
 		}
 	}
 }
-class outClient{
-	public outClient() {
+class outClient  implements KeyListener{
+	BomberData chat;
+	bmb game;
+	public outClient(bmb game) {
+		this.game = game;
 		BomberData chat = new BomberData();
 		byte[] data = new byte[2048];
 		ByteArrayOutputStream bo = new ByteArrayOutputStream();
@@ -153,12 +158,60 @@ class outClient{
 			so.writeObject(chat);
 			so.flush();
 			data = bo.toByteArray();
-			Socket socket = new Socket(chat.getIpserver(), 8888);
+			Socket socket = new Socket(chat.getIpserver(), 9999);
 			PrintStream dataOut = new PrintStream(socket.getOutputStream());
 			dataOut.write(data);
 			dataOut.close();
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		}
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		int key=e.getKeyCode();
+		if(key==KeyEvent.VK_RIGHT) {
+			chat.setRight(true);
+		}
+		if(key==KeyEvent.VK_LEFT) {
+			chat.setLeft(true);
+		}	
+		if(key==KeyEvent.VK_DOWN) {
+			chat.setDown(true);
+		}
+		if(key==KeyEvent.VK_UP) {
+			chat.setUp(true);
+		}
+		if(key==KeyEvent.VK_SPACE) {
+			chat.setSpace(true);
+		}
+		outClient client = new outClient(game);
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		int key=e.getKeyCode();
+		if(key==KeyEvent.VK_RIGHT) {
+			chat.setRight(false);
+		}
+		if(key==KeyEvent.VK_LEFT) {
+			chat.setLeft(false);
+		}	
+		if(key==KeyEvent.VK_DOWN) {
+			chat.setDown(false);
+		}
+		if(key==KeyEvent.VK_UP) {
+			chat.setUp(false);
+		}
+		if(key==KeyEvent.VK_SPACE) {
+			chat.setSpace(false);
+		}
+		outClient client = new outClient(game);
 	}
 }
