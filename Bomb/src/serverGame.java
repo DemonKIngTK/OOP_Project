@@ -38,6 +38,7 @@ public class serverGame extends Thread{
 class serverOutputTest{
 	BomberData chat;
 	Socket socket2;
+	serverInput input;
 	public serverOutputTest(BomberData chat) {
 		this.chat = chat;
 		
@@ -50,9 +51,9 @@ class serverOutputTest{
 				so.flush();
 				data = bo.toByteArray();
 				if(i==0) {
-					socket2 = new Socket("192.168.43.106",10000);
+					socket2 = new Socket(input.player[i].getIP(),10000);
 				}else {
-					socket2 = new Socket("192.168.43.204",10000);
+					socket2 = new Socket(input.player[i].getIP(),10000);
 				}
 				
 				PrintStream dataout = new PrintStream(socket2.getOutputStream());
